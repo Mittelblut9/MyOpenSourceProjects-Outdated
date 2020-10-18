@@ -12,20 +12,6 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
-# BlackDayz
-
-Author: [www.blackdayz.de](https://www.blackdayz.de/)
-
-## Installation
-
-Install a Project and have fun.
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
 [MIT License](https://choosealicense.com/licenses/mit/)  
 
 Copyright (c) [2020] [[www.blackdayz.de](https://www.blackdayz.de/)]
