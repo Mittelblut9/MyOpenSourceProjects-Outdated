@@ -1,7 +1,7 @@
 <br />
 <p align="center">
   <a href="">
-    <img src="src/img/github/BlackDayzLogo.png" alt="Logo" width="500" height="300">
+    <img src="https://www.blackdayz.de/src/img/logo/Blackdayzlogo.png" alt="Logo" width="500" height="300">
   </a>
 
   <h1 align="center">Cookie Clicker Remake with JavaScript</h1>
