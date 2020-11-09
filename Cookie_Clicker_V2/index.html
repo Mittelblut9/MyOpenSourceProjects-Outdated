@@ -1,0 +1,97 @@
+<!--
+    /**********************
+ * Author: www.Blackdayz.de
+ * 
+ * Open Source | Version 0.0.1
+ * 
+ * A very basic Cookie Clicker for your Website.
+ * You can paste it e.g on a Error Page like 404, for a homework or whatever. Feel free and have fun!
+ * 
+ * !Without this whole comment, i won't/can't give you support and push your request!
+ *
+ * !The documentation and some important informations is at the bottom of the main.js file or in the README.md
+/**********************/
+-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="content-language" content="en">
+
+        <meta name="author" content="BlackDayz &copy;" />
+        <meta name="robots" content="index, follow" />
+        <link rel="shortcut icon" href="https://www.blackdayz.de/src/img/logo/shortcuticon.png">
+        <title>Cookie Clicker Remake</title>
+        <meta name="description" content="A very easy Cookie Clicker using Javascript">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="src/css/style.css">
+        <link rel="stylesheet" href="src/css/media.css">
+        
+        <link rel="stylesheet" href="https://use.typekit.net/xue1nky.css">
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    </head>
+    <body onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false" oncontextmenu="return false">
+
+        
+        <noscript>
+            <span>  
+                You need JavaScript to use the full functionality of this website.
+                Here you can find the <a href="https://www.enable-javascript.com/en/" style="color: white; font-style: italic;"> instructions like you
+                Activate JavaScript in your browser.</a>
+            </span>
+        </noscript>
+
+        <div class="wrapper">
+
+            <span id="buyed" class="buyed">Du hast erfolgreich&nbsp;"<span id="buyed-content"></span>"&nbsp;gekauft</span>
+            <span id="error" class="error"></span>
+            
+            <div id="shop">
+                <p class="shop-header">Cookie Shop</p>
+                <div id="autoclicker" class="shop-item">
+                    <span class="shop-item-name">Auto&nbsp;Clicker</span><br /><br />
+                    <span class="shop-item-cost">Cost: <span id="cost-autoclicker"></span></span>
+                    <img class="shop-item-img" src="src/img/shop/Auto-Clicker.png" />
+                </div>
+                <div id="grandma" class="shop-item display-none"><span class="shop-item-name">Grandma</span><br /><br />
+                    <span class="shop-item-cost">Cost: <span id="cost-grandma"></span></span>
+                    <img class="shop-item-img" src="src/img/shop/Grandma.png" style="margin-top: -40px"/>
+                </div>
+
+            </div>
+
+            <div id="clicker">
+                <div id="ergebnis">You have <span id="ergebnis-ausgabe"></span> Cookies!</div>
+                <div id="autoclick-div">You gain <span id="autoclick-ausgabe"></span> Cookies per Seconds</div>
+                <div id="Cookie" >
+                    <img src="src/svg/cookie.svg" id="cookie-svg" >
+                </div>
+            </div>
+
+
+            <audio id="cookieclicksound" preload="auto">
+                <source src="src/mp3/Cookie_Clicker.mp3" />
+            </audio>
+
+            <div id="cookies-bg"></div>
+
+            <div id="author">
+                <p><a href="//www.blackdayz.de" target="_blank" rel="noopener">Author: www.blackdayz.de</a></p>
+            </div>
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="src/js/main.js" type="text/javascript" async></script>
+    </body>
+</html>
+
+
+<!--
+    
+Cookie: https://www.flaticon.com/free-icon/cookie_808749?term=cookie&page=1&position=50
+
+
+-->
