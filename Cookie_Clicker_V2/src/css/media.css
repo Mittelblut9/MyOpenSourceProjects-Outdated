@@ -1,0 +1,25 @@
+/* IN PROGRESS */
+
+@media (min-width: 183px) {
+    #cookies-bg {
+        left: -100px;
+    }
+}
+
+@media (max-width: 1068px) {
+    body {
+        overflow-y: scroll !important;
+    }
+    #shop {
+        position: absolute;
+        bottom: -400px;
+        width: 100%; height: auto;
+    }
+}
+
+@media (max-width: 702px) {
+    #Cookie img {
+        height: auto;
+        width: 100%;
+    }
+}
