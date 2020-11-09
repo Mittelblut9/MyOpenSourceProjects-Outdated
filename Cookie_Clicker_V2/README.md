@@ -8,7 +8,7 @@
 
   <p align="center">
      Very basic Cookie Clicker for your Website using JavaScript.
-    <br />
+    <br /> 
     <br />
     <a href="https://www.blackdayz.de/OpenSourceProjekte/Cookie_Clicker_V2/">View Demo</a>
     ·
