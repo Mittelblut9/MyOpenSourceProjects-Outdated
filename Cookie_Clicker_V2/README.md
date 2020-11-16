@@ -16,7 +16,7 @@
     ·
     <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/issues">Request Feature</a>
     ·
-    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/issues" title="Send feedback with the Label 'Feedback'">Send Feedback</a>
+    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/labels/feedback" title="Send feedback with the Label 'Feedback'">Send Feedback</a>
     ·
     <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/pulls">Pull Request</a>
   </p>
