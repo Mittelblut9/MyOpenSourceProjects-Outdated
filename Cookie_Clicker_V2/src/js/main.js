@@ -18,6 +18,7 @@ CHANGELOG += "\n16.11.2020";
 CHANGELOG += "\n- Added Sound Control";
 CHANGELOG += "\n- Added 2 new Items (grandma (*1.5 auto click), (miner (*1,5 cookie per click))";
 CHANGELOG += "\n- Prices adjusted";
+CHANGELOG += "\n- Mobile Responsive fixes";
 CHANGELOG += "\n- Bug Fixes";
 
 //! System-relevant functions //
