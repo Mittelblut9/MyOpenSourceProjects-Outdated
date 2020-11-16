@@ -2,14 +2,16 @@
     /**********************
  * Author: www.Blackdayz.de
  * 
- * Open Source | Version 0.0.1
+ * Open Source | Version 0.0.2
  * 
  * A very basic Cookie Clicker for your Website.
  * You can paste it e.g on a Error Page like 404, for a homework or whatever. Feel free and have fun!
  * 
  * !Without this whole comment, i won't/can't give you support and push your request!
  *
- * !The documentation and some important informations is at the bottom of the main.js file or in the README.md
+ * !I would appreciate if you keep my name on the website or in the code :)
+ *
+ * !Some important informations is at the bottom of the main.js file or in the README.md
 /**********************/
 -->
 <!DOCTYPE html>
@@ -34,7 +36,6 @@
         <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     </head>
     <body onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false" oncontextmenu="return false">
-
         
         <noscript>
             <span>  
@@ -61,11 +62,16 @@
                     <img class="shop-item-img" src="src/img/shop/Grandma.png" style="margin-top: -40px"/>
                 </div>
 
+                <div id="miners" class="shop-item display-none"><span class="shop-item-name">Miners</span><br /><br />
+                    <span class="shop-item-cost">Cost: <span id="cost-miners"></span></span>
+                    <img class="shop-item-img" src="src/img/shop/miners.png" style="margin-top: -40px"/>
+                </div>
+
             </div>
 
             <div id="clicker">
-                <div id="ergebnis">You have <span id="ergebnis-ausgabe"></span> Cookies!</div>
-                <div id="autoclick-div">You gain <span id="autoclick-ausgabe"></span> Cookies per Seconds</div>
+                <div id="ergebnis">You have <span id="ergebnis-output"></span> Cookies!</div>
+                <div id="autoclick-div">You gain <span id="autoclick-output"></span> Cookies per Seconds</div>
                 <div id="Cookie" >
                     <img src="src/svg/cookie.svg" id="cookie-svg" >
                 </div>
@@ -79,6 +85,7 @@
             <div id="cookies-bg"></div>
 
             <div id="author">
+                <div class="volume" id="volume-on-off"><i class="las la-volume-off" id="volume-on"></i><i class='las la-volume-up' id='volume-off'></i></div>
                 <p><a href="//www.blackdayz.de" target="_blank" rel="noopener">Author: www.blackdayz.de</a></p>
             </div>
         </div>
