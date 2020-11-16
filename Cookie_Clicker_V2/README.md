@@ -12,11 +12,11 @@
     <br />
     <a href="https://www.blackdayz.de/OpenSourceProjekte/Cookie_Clicker_V2/">View Demo</a>
     ·
-    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2issues">Report Bug</a>
+    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2issues">Request Feature</a>
+    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2/issues">Request Feature</a>
     ·
-    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2issues" title="Send feedback with the Label 'Feedback'">Send Feedback</a>
+    <a href="https://github.com/Mittelblut9/MyOpenSourceProjects/Cookie_Clicker_V2/issues" title="Send feedback with the Label 'Feedback'">Send Feedback</a>
   </p>
 </p>
 
