@@ -45,7 +45,6 @@ noscript span {
 .wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 #shop {
@@ -227,6 +226,14 @@ noscript span {
   pointer-events: none;
 }
 
+.volume i{
+  position: absolute;
+  bottom: 40px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 3em;
+}
+
 /*Author: www.blackdayz.de*/
 #author {
   position: absolute;
@@ -240,9 +247,9 @@ noscript span {
 }
 
 .display-block {
-  display: block;
+  display: block !important;
 }
 
 .display-none {
-  display: none;
+  display: none !important;
 }
