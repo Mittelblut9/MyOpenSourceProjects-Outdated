@@ -81,17 +81,7 @@ npm install
 
 # Documentation
 
-When the page is loaded, the "cookie_rotate ()" function is called
-which causes the cookie to rotate endlessly.
-
-The click of the user is started with the click events "increaseScore" and 
-"clickanimation1".
-Then the functions are carried out (in the following order):
-1. "increaseScore" -> "cookie_click()" -> "displayScore()" 
-2. "clickanimation1"
-
-
-All other functions works automatically
+The Documentation will come in the future :D
 
 
 If somewhere are spelling errors or something is not that good explained
