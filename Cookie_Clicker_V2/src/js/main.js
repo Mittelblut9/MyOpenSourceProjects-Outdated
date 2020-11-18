@@ -8,19 +8,6 @@
  * 
 /**********************/
 
-var VERSION = "0.0.2";
-var AUTHOR = "www.blackdayz.de";
-var LICENSE = "MIT Open Source";
-var LASTUPDATE = "16.11.2020";
-var CHANGELOG = "09.11.2020 - Release of the Cookie Clicker made with JavaScript";
-CHANGELOG += "\n";
-CHANGELOG += "\n16.11.2020";
-CHANGELOG += "\n- Added Sound Control";
-CHANGELOG += "\n- Added 2 new Items (grandma (*1.5 auto click), (miner (*1,5 cookie per click))";
-CHANGELOG += "\n- Prices adjusted";
-CHANGELOG += "\n- Mobile Responsive fixes";
-CHANGELOG += "\n- Bug Fixes";
-
 //! System-relevant functions //
 
 //Get the Value of the cookie(s)
@@ -47,6 +34,10 @@ setInterval(function checkthings() {
   }
 }, 1000); //1000 = 1 Second
 
+
+function countDigits(i) {
+  return (i + "").length;
+}
 //Change the Position for the background cookies for the given client width
 var clientdevice = document.querySelector('html').clientWidth;
 if (clientdevice < '768') {
@@ -67,19 +58,24 @@ var div100 = 0; //100 rounds of creating a div
 var volumeoff = getCookieValue("volumeoff"); //volume off bool
 var autoclickbool = getCookieValue("autoclickerbool"); //its true on first buy
 var autoclickvalue = round(getCookieValue("autoclickervalue"), 1); //How much cookies you gain per s
-var autoclickcost = parseInt(getCookieValue("autoclickercost")); //The cost of the autoclicker
+var autoclickvaluemax = 1000000000000000000000;
+var autoclickcost = getCookieValue("autoclickercost"); //The cost of the autoclicker
 var autoclickitems = parseInt(getCookieValue("autoclickeritems")); //The number of autoclicker items 
 
-var grandmacost = parseInt(getCookieValue("grandmacost")); //The cost of the "grandma" item
+var grandmacost = getCookieValue("grandmacost"); //The cost of the "grandma" item
 var grandmaactive = getCookieValue("grandmaactive"); //grandma bool
 var grandmaitems = parseInt(getCookieValue("grandmaitems")); //The number of gramdma items
 
 
 var cookiesperclick = round(getCookieValue("cookiesperclick"), 1); //How much cookies per click
-var minerscost = parseInt(getCookieValue("minerscost")); //The cost of the miners
+var minerscost = getCookieValue("minerscost"); //The cost of the miners
 var minersactive = getCookieValue("minersactive"); //miners bool
 var minersitems = parseInt(getCookieValue("minersitems")); //The number of mineritems
 
+var wizardactive = getCookieValue("wizardactive");
+var wizardcost = getCookieValue("wizardcost");
+var wizarditems = parseInt(getCookieValue("wizarditems"));
+var wizardvalue = parseInt(getCookieValue("wizardvalue"));
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -106,34 +102,35 @@ var grandmacostoutput = document.getElementById("cost-grandma");//Output for the
 var minersdiv = document.getElementById('miners'); //miners div for onclick events
 var minerscostoutput = document.getElementById('cost-miners');//Output for the Cost of the miners
 
+var wizarddiv = document.getElementById('wizard');
+var wizardcost_output = document.getElementById('cost-wizard');
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-
-//If the user press f12
+//If the user press space or enter
 body.addEventListener('keydown', function (event) {
-  if (event.keyCode === 123) {
-    console.log("|----A very easy Cookie Clicker using Javascript----|");
-    console.log("Version: " + VERSION);
-    console.log("Author " + AUTHOR);
-    console.log("Last Update " + LASTUPDATE);
-    console.log(" ");
-    console.log("%cCHANGELOG:", "font-size:1.4em; font-weight:900; color:red");
-    console.log(CHANGELOG);
-    console.log(" ");
-    console.log("|----Please buy real cookies instead of cheating here!----|");
+  if (event.keyCode === 32 || event.keyCode === 13) {
+    score++;
+    cookie_click();
+    displayScore();
+    clicksound();
   }
 });
-
-//Data that its important to load at the all beginning
-body.onload = function () {
 
   //Check if Cookies are blocked
   cookievalue = 123;
   checkcookie();
   //
 
-  //Check if the Cookie was set
+//Data that its important to load at the all beginning
+body.onload = function () {
+
+  var infoscript = document.createElement('script');
+  infoscript.type = 'module';
+  infoscript.src = 'src/js/info.js';
+  document.getElementsByTagName('body')[0].appendChild(infoscript);
+
+  //Check if the Cookie was set, if not print out some text
   if (getCookieValue("cookievalue") == '') {
     body.innerHTML = "<span style='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3em;font.weight:900;'>You block Cookies! To play the game, unblock cookies on this Website!</span>";
     body.innerHTML += "<br /> <span style='position:absolute;right:0;bottom:0;font-size:1.4em;font-weight:900;'>You don't block Cookies? Write an Issue on <a style='color: black; text-decoration:underline;' href='https://github.com/Mittelblut9/MyOpenSourceProjects/issues' target='_blank' rel='noopener'>GitHub!</a>";
@@ -141,17 +138,17 @@ body.onload = function () {
 
   //Volume Control
   volumeoffcookie();
-  if(volumeoff == '') {
+  if (volumeoff == '') {
     clickaudio.volume = 0.2; //Click Audio Volume: 20%
     volume_on.classList.add('display-none');
     volume_off.classList.remove('display-none');
   }
-  else if(volumeoff == 'true') {
+  else if (volumeoff == 'true') {
     clickaudio.volume = 0; //Click Audio Volume: 0%
     volume_on.classList.remove('display-none');
     volume_off.classList.add('display-none');
   }
-  else if(volumeoff == 'false') {
+  else if (volumeoff == 'false') {
     clickaudio.volume = 0.2; //Click Audio Volume: 20%
     volume_on.classList.add('display-none');
     volume_off.classList.remove('display-none');
@@ -164,10 +161,13 @@ body.onload = function () {
   }
   else {
     result_output.innerHTML = score; //display the score
-    cookie_slide_bg();//animated background function
   }
-  if (isNaN(autoclickcost)) {//if the autoclickcost is NaN
+  if (autoclickcost === 'Sold Out') {
+    cost_autoclicker.innerHTML = autoclickcost;
+  }
+  else if (isNaN(autoclickcost) || autoclickcost < 30) {//if the autoclickcost is NaN
     autoclickcost = 30;
+    autoclickercostcookie();
   }
   if (isNaN(autoclickvalue)) {//if the autoclickvalue is NaN
     autoclickvalue = 0;
@@ -181,10 +181,14 @@ body.onload = function () {
     loadminers();
     displayScore();
   }
+  if (wizardactive == 'true') {
+    loadwizard();
+    displayScore();
+  }
   if (isNaN(grandmaitems)) { //if the grandmaitems is NaN
     grandmaitems = 0;
   }
-  if (cookiesperclick == 0) { 
+  if (cookiesperclick == 0) {
     cookiesperclick = 1;
     cookiesperclickcookie(); //write the var into cookies
   }
@@ -200,16 +204,23 @@ body.onload = function () {
 
   minerscostoutput.innerHTML = minerscost; //display the cost for the miners onload
   // \\
+
+  
+  if (autoclickvalue >= autoclickvaluemax) {
+    cookiepersecond.innerHTML = " too much ";
+  }
+
+  cookie_slide_bg();//animated background function
 }
 
-volume_off.onclick = function() { //Onclick event to mute the sound
+volume_off.onclick = function () { //Onclick event to mute the sound
   clickaudio.volume = 0;
   volumeoff = true;
   volume_on.classList.remove('display-none');
   volume_off.classList.add('display-none');
   volumeoffcookie();
 };
-volume_on.onclick = function() { //Onclick event to unmute the sound
+volume_on.onclick = function () { //Onclick event to unmute the sound
   clickaudio.volume = 0.2;
   volumeoff = false;
   volume_on.classList.add('display-none');
@@ -224,11 +235,83 @@ function clicksound() {
   clickaudio.play();
 }
 
+
 // Display the score after eachclick
 function displayScore() {
   result_output.innerHTML = parseInt(score);
-  grandmacostoutput.innerHTML = parseInt(grandmacost);
-  minerscostoutput.innerHTML = parseInt(minerscost);
+  grandmacostoutput.innerHTML = grandmacost;
+  minerscostoutput.innerHTML = minerscost;
+  wizardcost_output.innerHTML = wizardcost;
+
+  if(autoclickcost >= 1000000000000000000000) {
+    autoclickcost = "Sold Out";
+    cost_autoclicker.innerHTML = autoclickcost;
+    autoclickercostcookie();
+  }
+  if(grandmacost >= 1000000000000000000000) {
+    grandmacost = "Sold Out";
+    grandmacostoutput.innerHTML = grandmacost;
+    grandmacostcookie();
+  }
+  if(minerscost >= 1000000000000000000000) {
+    minerscost = "Sold Out";
+    minerscostoutput.innerHTML = minerscost;
+    minerscostcookie();
+  }
+  if(wizardcost >= 1000000000000000000000) {
+    wizardcost = "Sold Out";
+    wizardcost_output.innerHTML = wizardcost;
+    wizardcostcookie();
+  }
+
+  var z; //score devided by the high number e.g.("million")
+  var c; //var z round to 2 decimal places
+
+  //When the score is between 1 Million and 1 Billion
+  if (score >= 1000000 && score < 1000000000) {
+    z = score / 1000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Million";
+
+  }else if (score >= 1000000000 && score < 1000000000000) {
+    z = score / 1000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Billion";
+  }else if (score >= 1000000000000 && score < 1000000000000000) {
+    z = score / 1000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Trillions";
+  }
+  else if (score >= 1000000000000000 && score < 1000000000000000000) {
+    z = score / 1000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Quadrillion";
+  }else if (score >= 1000000000000000 && score < 1000000000000000000) {
+    z = score / 1000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Quintillion";
+  }else if (score >= 1000000000000000000 && score < 1000000000000000000000) {
+    z = score / 1000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Sextillion";
+  }else if (score >= 1000000000000000000000 && score < 1000000000000000000000000) {
+    z = score / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Septillion";
+  }
+  else if (score >= 1000000000000000000000000) { //&& score < 1000000000000000000000000000
+    z = score / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = "Infinity";
+  }
   scorecookie();
 }
 // the number of score gets 1+
@@ -340,13 +423,15 @@ cookie.addEventListener('click', clickanimation1); //function for the click anim
 cookie.addEventListener('click', clicksound);//function for the click sound
 
 
+
+//ADD NEW ITEM //
 function addnewitem(item) { //function for all new items
   if (item == 'Grandma') { //item "grandma" added
     grandmadiv.classList.remove('display-none');
     grandmadiv.classList.add('display-block');
 
     grandmacost = 100;
-    grandmacostoutput.innerHTML = grandmacost;
+    grandmacostoutput.innerHTML = parseInt(grandmacost);
     grandmaactive = true;
     grandmacostcookie();
     grandmaactivecookie()
@@ -356,10 +441,22 @@ function addnewitem(item) { //function for all new items
     minersdiv.classList.add('display-block');
 
     minerscost = 500;
-    minerscostoutput.innerHTML = minerscost;
+    minerscostoutput.innerHTML = parseInt(minerscost);
     minersactive = true;
     minerscostcookie();
     minersactivecookie()
+  }
+  if (item == 'Wizard') {
+    wizarddiv.classList.remove('display-none');
+    wizarddiv.classList.add('display-block');
+
+    wizardcost = 20000;
+    wizardcost_output.innerHTML = parseInt(wizardcost);
+    wizardactive = true;
+    wizardvalue = 2;
+    wizardcostcookie();
+    wizardactivecookie();
+    wizardvaluecookie();
   }
 }
 
@@ -373,13 +470,18 @@ function loadminers() { //function to load the miners div
   minersdiv.classList.add('display-block');
 }
 
+function loadwizard() {
+  wizarddiv.classList.remove('display-none');
+  wizarddiv.classList.add('display-block');
+}
+
 //! ////////////////////  BUY Feature ///////////////////
 
 //Buy Autoclicker
 
 autoclickerdiv.onclick = function () { //when the user click on the div
   if (score >= autoclickcost) { //when the score is higher then it costs
-    if (autoclickitems == 5) {//if the user have bought the 5. autoclicker item, the "grandma item" will be released
+    if (autoclickitems >= 5 && grandmaactive != 'true') {//if the user have bought the 5. autoclicker item, the "grandma item" will be released
       item = "Grandma";
       addnewitem(item);
     }
@@ -392,6 +494,7 @@ autoclickerdiv.onclick = function () { //when the user click on the div
       autoclickvalue += 0.3; //set the value to 1
       cookiepersecond.innerHTML = round(autoclickvalue, 1); //display the cps
       autoclickcost *= 1.1; //set the cost to * 2
+      autoclickcost = parseInt(autoclickcost);
       cost_autoclicker.innerHTML = autoclickcost; //display the new cost
 
       autoclickerboolcookie(); //write "true" in cookies
@@ -403,6 +506,9 @@ autoclickerdiv.onclick = function () { //when the user click on the div
       item = "Autoclicker"; //set the value to ="autoclicker"
       buy(item); //trigger the function with the value on line above
 
+      if (autoclickvalue >= autoclickvaluemax) {
+        cookiepersecond.innerHTML = " too much ";
+      }
     }
     else { //if the bool is already true
       score -= autoclickcost; //calculates the costs minus the score
@@ -410,7 +516,8 @@ autoclickerdiv.onclick = function () { //when the user click on the div
       autoclickvalue += 0.3;
       cookiepersecond.innerHTML = round(autoclickvalue, 1);
       autoclickcost *= 1.1;
-      cost_autoclicker.innerHTML = parseInt(autoclickcost);
+      autoclickcost = parseInt(autoclickcost);
+      cost_autoclicker.innerHTML = autoclickcost;
       autoclickitems++;
 
       autoclickervaluecookie();
@@ -420,25 +527,31 @@ autoclickerdiv.onclick = function () { //when the user click on the div
 
       item = "Autoclicker";
       buy(item);
+
+      if (autoclickvalue >= autoclickvaluemax) {
+        cookiepersecond.innerHTML = " too much ";
+      }
     }
-  } else {
+  } else if (autoclickcost === 'Sold Out') {
+    item = "Auto Clicker";
+    soldout(item);
+    displayScore();
+  }
+  else {
     nocookies();
   }
 }
 
 if (grandmaactive != 'false') {
   grandmadiv.onclick = function () { //onclick event to buy one grandma
-    if (grandmaitems == 5) { //if the items is 5 to add the new item
-      item = "Miners";
-      addnewitem(item);
-    }
+
     if (score >= grandmacost) {
       score -= grandmacost;
-
-      autoclickvalue += 1.5;
+      autoclickvalue *= 1.3;
       cookiepersecond.innerHTML = round(autoclickvalue, 1);
       grandmacost *= 1.2;
-      grandmacostoutput.innerHTML = parseInt(grandmacost);
+      grandmacost = parseInt(grandmacost);
+      grandmacostoutput.innerHTML = grandmacost;
       grandmaitems++;
 
       autoclickervaluecookie();
@@ -448,8 +561,22 @@ if (grandmaactive != 'false') {
 
       item = "Grandma";
       buy(item);
-    } else {
+
+      if (autoclickvalue >= autoclickvaluemax) {
+        cookiepersecond.innerHTML = " too much ";
+      }
+    }else if (grandmacost === 'Sold Out') {
+      item = "Grandma";
+      soldout(item);
+      displayScore();
+    }
+     else {
       nocookies();
+    }
+
+    if (grandmaitems >= 5 && minersactive == '') { //if the items is 5 to add the new item
+      item = "Miners";
+      addnewitem(item);
     }
   }
 }
@@ -457,12 +584,18 @@ if (grandmaactive != 'false') {
 if (minersactive != 'false') {
   minersdiv.onclick = function () { //onclick event to buy one miner
 
+    if (minersitems >= 7 && wizardactive == '') {
+      item = "Wizard";
+      addnewitem(item);
+    }
+
     if (score >= minerscost) {
       score -= minerscost;
 
       cookiesperclick *= 1.5;
       minerscost *= 1.5;
-      minerscostoutput.innerHTML = parseInt(minerscost);
+      minerscost = parseInt(minerscost);
+      minerscostoutput.innerHTML = minerscost;
       minersitems++;
 
       cookiesperclickcookie();
@@ -472,11 +605,52 @@ if (minersactive != 'false') {
 
       item = "Miners";
       buy(item);
-    } else {
+    }else if (minerscost === 'Sold Out') {
+      item = "Miners";
+      soldout(item);
+      displayScore();
+    } 
+    else {
       nocookies();
     }
   }
 }
+
+if (wizardactive != 'false') {
+  wizarddiv.onclick = function () { //onclick event to buy one miner
+
+    // if(wizarditems >= 7) {
+    //   item = "";
+    //   addnewitem(item);
+    // }
+
+    if (score >= wizardcost) {
+      score -= wizardcost;
+
+      score *= wizardvalue;
+
+      wizardcost *= 2;
+      wizardcost = parseInt(wizardcost);
+      wizardvalue *= 2.3;
+
+      wizardvaluecookie();
+      wizardcostcookie();
+      displayScore();
+
+      item = "Wizard";
+      buy(item);
+    }else if (wizardcost === 'Sold Out') {
+      item = "Wizard";
+      soldout(item);
+      displayScore();
+    }
+    else {
+      nocookies();
+    }
+  }
+}
+
+
 
 function nocookies() { //function when the user have no cookies
   error = "You don't have enough cookies";
@@ -489,6 +663,13 @@ function nocookies() { //function when the user have no cookies
 function buy(item) { //function when the user buyed the item
   buyeddiv.classList.add('buyed-animate');
   buyedoutput.innerHTML = item;
+  setTimeout(async function () { buyeddiv.classList.remove('buyed-animate'); }, 4000);
+}
+
+function soldout(item) {
+  error = ("The Item " + item + " is sold out!");
+  buyederror.classList.add('buyed-animate');
+  buyederror.innerHTML = error;
   setTimeout(async function () { buyeddiv.classList.remove('buyed-animate'); }, 4000);
 }
 
@@ -534,7 +715,7 @@ async function autoclickervaluecookie() {
 async function autoclickercostcookie() {
   var a = new Date();
   a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
-  document.cookie = 'autoclickercost=' + parseInt(autoclickcost) + ';expires=' +
+  document.cookie = 'autoclickercost=' + autoclickcost + ';expires=' +
     a.toGMTString() + ';';
 }
 
@@ -548,7 +729,7 @@ async function autoclickitemscookie() {
 async function grandmacostcookie() {
   var a = new Date();
   a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
-  document.cookie = 'grandmacost=' + parseInt(grandmacost) + ';expires=' +
+  document.cookie = 'grandmacost=' + grandmacost + ';expires=' +
     a.toGMTString() + ';';
 }
 
@@ -569,7 +750,7 @@ async function grandmaactivecookie() {
 async function minerscostcookie() {
   var a = new Date();
   a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
-  document.cookie = 'minerscost=' + parseInt(minerscost) + ';expires=' +
+  document.cookie = 'minerscost=' + minerscost + ';expires=' +
     a.toGMTString() + ';';
 }
 
@@ -594,6 +775,26 @@ async function cookiesperclickcookie() {
     a.toGMTString() + ';';
 }
 
+async function wizardcostcookie() {
+  var a = new Date();
+  a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
+  document.cookie = 'wizardcost=' + wizardcost + ';expires=' +
+    a.toGMTString() + ';';
+}
+
+async function wizardactivecookie() {
+  var a = new Date();
+  a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
+  document.cookie = 'wizardactive=' + wizardactive + ';expires=' +
+    a.toGMTString() + ';';
+}
+
+async function wizardvaluecookie() {
+  var a = new Date();
+  a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
+  document.cookie = 'wizardvalue=' + parseInt(wizardvalue) + ';expires=' +
+    a.toGMTString() + ';';
+}
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //  If somewhere are spelling errors or something is not that good explained
