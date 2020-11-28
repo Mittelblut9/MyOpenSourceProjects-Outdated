@@ -87,7 +87,8 @@ var clickaudio = document.getElementById('cookieclicksound'); //Click Sound
 var cookiepersecond = document.getElementById('autoclick-output'); //Cookie Score output div
 var volume_off = document.getElementById('volume-off'); //Sound on Button
 var volume_on = document.getElementById('volume-on'); //Sound off Button
-
+var statsbutton = document.getElementById('profile-button'); //Button to see the own stats
+var statsclose = document.getElementById('profile-close');
 
 var buyederror = document.getElementById('error');//not enough cookies div
 var buyedoutput = document.getElementById('buyed-content');//Item bought output
@@ -113,18 +114,18 @@ body.addEventListener('keydown', function (event) {
     score++;
     cookie_click();
     displayScore();
+    clickanimation1(600);
     clicksound();
   }
 });
 
-  //Check if Cookies are blocked
-  cookievalue = 123;
-  checkcookie();
-  //
+//Check if Cookies are blocked
+cookievalue = 123;
+checkcookie();
+//
 
-//Data that its important to load at the all beginning
-body.onload = function () {
 
+function bodyload() {
   var infoscript = document.createElement('script');
   infoscript.type = 'module';
   infoscript.src = 'src/js/info.js';
@@ -196,6 +197,10 @@ body.onload = function () {
     minersitems = 0;
     minersitemscookie();
   }
+  if (isNaN(wizarditems)) { //if the minersitems is NaN
+    wizarditems = 0;
+    wizarditemscookie();
+  }
 
   cookiepersecond.innerHTML = autoclickvalue;//display the cookie per second onload
 
@@ -205,28 +210,29 @@ body.onload = function () {
   minerscostoutput.innerHTML = minerscost; //display the cost for the miners onload
   // \\
 
-  
   if (autoclickvalue >= autoclickvaluemax) {
     cookiepersecond.innerHTML = " too much ";
   }
 
   cookie_slide_bg();//animated background function
+  checkitemscost();
+  minimizenumbers();
 }
 
-volume_off.onclick = function () { //Onclick event to mute the sound
+volume_off.addEventListener( 'click', function () { //Onclick event to mute the sound
   clickaudio.volume = 0;
   volumeoff = true;
   volume_on.classList.remove('display-none');
   volume_off.classList.add('display-none');
   volumeoffcookie();
-};
-volume_on.onclick = function () { //Onclick event to unmute the sound
+});
+volume_on.addEventListener('click', function () { //Onclick event to unmute the sound
   clickaudio.volume = 0.2;
   volumeoff = false;
   volume_on.classList.add('display-none');
   volume_off.classList.remove('display-none');
   volumeoffcookie();
-}
+});
 
 
 //function to play the sound
@@ -243,77 +249,12 @@ function displayScore() {
   minerscostoutput.innerHTML = minerscost;
   wizardcost_output.innerHTML = wizardcost;
 
-  if(autoclickcost >= 1000000000000000000000) {
-    autoclickcost = "Sold Out";
-    cost_autoclicker.innerHTML = autoclickcost;
-    autoclickercostcookie();
-  }
-  if(grandmacost >= 1000000000000000000000) {
-    grandmacost = "Sold Out";
-    grandmacostoutput.innerHTML = grandmacost;
-    grandmacostcookie();
-  }
-  if(minerscost >= 1000000000000000000000) {
-    minerscost = "Sold Out";
-    minerscostoutput.innerHTML = minerscost;
-    minerscostcookie();
-  }
-  if(wizardcost >= 1000000000000000000000) {
-    wizardcost = "Sold Out";
-    wizardcost_output.innerHTML = wizardcost;
-    wizardcostcookie();
-  }
 
-  var z; //score devided by the high number e.g.("million")
-  var c; //var z round to 2 decimal places
-
-  //When the score is between 1 Million and 1 Billion
-  if (score >= 1000000 && score < 1000000000) {
-    z = score / 1000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Million";
-
-  }else if (score >= 1000000000 && score < 1000000000000) {
-    z = score / 1000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Billion";
-  }else if (score >= 1000000000000 && score < 1000000000000000) {
-    z = score / 1000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Trillions";
-  }
-  else if (score >= 1000000000000000 && score < 1000000000000000000) {
-    z = score / 1000000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Quadrillion";
-  }else if (score >= 1000000000000000 && score < 1000000000000000000) {
-    z = score / 1000000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Quintillion";
-  }else if (score >= 1000000000000000000 && score < 1000000000000000000000) {
-    z = score / 1000000000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Sextillion";
-  }else if (score >= 1000000000000000000000 && score < 1000000000000000000000000) {
-    z = score / 1000000000000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = c + " Septillion";
-  }
-  else if (score >= 1000000000000000000000000) { //&& score < 1000000000000000000000000000
-    z = score / 1000000000000000000000;
-    c = z.toFixed(2);
-
-    result_output.innerHTML = "Infinity";
-  }
+  checkitemscost();
+  minimizenumbers();
   scorecookie();
 }
+
 // the number of score gets 1+
 function addscore() {
   score += round(cookiesperclick, 1);
@@ -348,8 +289,14 @@ async function clickanimation1(e) {
   plus1++; //Value "animation guideline"
   //generate a div - each of them have an other id
   $("#Cookie").append('<div id="plus1-' + plus1 + '"  style="font-size: 2em; pointer-events: none; z-index: 1;" hidden>+' + round(cookiesperclick, 1) + '</div>');
-  $("#plus1-" + plus1).css("top", e.clientY - 30);
-  $("#plus1-" + plus1).css("left", e.clientX - 20);
+  if (event.keyCode === 32 || event.keyCode === 13) {
+    $("#plus1-" + plus1).css("top", e - 100);
+    $("#plus1-" + plus1).css("left", e + 210);
+  }
+  else {
+    $("#plus1-" + plus1).css("top", e.clientY - 30);
+    $("#plus1-" + plus1).css("left", e.clientX - 20);
+  }
   $("#plus1-" + plus1).css("position", "absolute");
   $("#plus1-" + plus1).css("width", "25px");
   $("#plus1-" + plus1).css("height", "25px");
@@ -401,7 +348,6 @@ function cookie_slide_bg() {
     var position = Math.floor(Math.random() * randomposition); //gets a number betweeen 0 and 2000
     var animation = Math.floor(Math.random() * 100); //gets a number betweeen 0 and 50
     var padding = Math.floor(Math.random() * 100); //Gets a number betweeen 0 and 100
-    var topposition = Math.floor(Math.random() * 300); //Gets a number betweeen 0 and 100
 
     $("#cookieslidebg" + cookie_slide).css("left", position + 'px'); // appends the random generated number to the div element
     $("#cookieslidebg" + cookie_slide).css("padding", padding + 'px'); // appends the random generated number to the div element
@@ -417,20 +363,13 @@ function autoclick() {
   displayScore();
 }
 
-//Click Events
-cookie.addEventListener('click', addscore); //function to do the "game important" tasks
-cookie.addEventListener('click', clickanimation1); //function for the click animation
-cookie.addEventListener('click', clicksound);//function for the click sound
-
-
-
 //ADD NEW ITEM //
 function addnewitem(item) { //function for all new items
   if (item == 'Grandma') { //item "grandma" added
     grandmadiv.classList.remove('display-none');
     grandmadiv.classList.add('display-block');
 
-    grandmacost = 100;
+    grandmacost = 500;
     grandmacostoutput.innerHTML = parseInt(grandmacost);
     grandmaactive = true;
     grandmacostcookie();
@@ -440,7 +379,7 @@ function addnewitem(item) { //function for all new items
     minersdiv.classList.remove('display-none');
     minersdiv.classList.add('display-block');
 
-    minerscost = 500;
+    minerscost = 2000;
     minerscostoutput.innerHTML = parseInt(minerscost);
     minersactive = true;
     minerscostcookie();
@@ -450,7 +389,7 @@ function addnewitem(item) { //function for all new items
     wizarddiv.classList.remove('display-none');
     wizarddiv.classList.add('display-block');
 
-    wizardcost = 20000;
+    wizardcost = 2000000000;
     wizardcost_output.innerHTML = parseInt(wizardcost);
     wizardactive = true;
     wizardvalue = 2;
@@ -479,7 +418,7 @@ function loadwizard() {
 
 //Buy Autoclicker
 
-autoclickerdiv.onclick = function () { //when the user click on the div
+autoclickerdiv.addEventListener('click', function () { //when the user click on the div
   if (score >= autoclickcost) { //when the score is higher then it costs
     if (autoclickitems >= 5 && grandmaactive != 'true') {//if the user have bought the 5. autoclicker item, the "grandma item" will be released
       item = "Grandma";
@@ -532,22 +471,17 @@ autoclickerdiv.onclick = function () { //when the user click on the div
         cookiepersecond.innerHTML = " too much ";
       }
     }
-  } else if (autoclickcost === 'Sold Out') {
-    item = "Auto Clicker";
-    soldout(item);
-    displayScore();
-  }
-  else {
+  }else {
     nocookies();
   }
-}
+});
 
 if (grandmaactive != 'false') {
-  grandmadiv.onclick = function () { //onclick event to buy one grandma
+  grandmadiv.addEventListener('click', function () { //onclick event to buy one grandma
 
     if (score >= grandmacost) {
       score -= grandmacost;
-      autoclickvalue *= 1.3;
+      autoclickvalue *= 1.1;
       cookiepersecond.innerHTML = round(autoclickvalue, 1);
       grandmacost *= 1.2;
       grandmacost = parseInt(grandmacost);
@@ -565,12 +499,7 @@ if (grandmaactive != 'false') {
       if (autoclickvalue >= autoclickvaluemax) {
         cookiepersecond.innerHTML = " too much ";
       }
-    }else if (grandmacost === 'Sold Out') {
-      item = "Grandma";
-      soldout(item);
-      displayScore();
-    }
-     else {
+    }else {
       nocookies();
     }
 
@@ -578,11 +507,11 @@ if (grandmaactive != 'false') {
       item = "Miners";
       addnewitem(item);
     }
-  }
+  });
 }
 
 if (minersactive != 'false') {
-  minersdiv.onclick = function () { //onclick event to buy one miner
+  minersdiv.addEventListener('click', function () { //onclick event to buy one miner
 
     if (minersitems >= 7 && wizardactive == '') {
       item = "Wizard";
@@ -592,7 +521,7 @@ if (minersactive != 'false') {
     if (score >= minerscost) {
       score -= minerscost;
 
-      cookiesperclick *= 1.5;
+      cookiesperclick *= 1.2;
       minerscost *= 1.5;
       minerscost = parseInt(minerscost);
       minerscostoutput.innerHTML = minerscost;
@@ -605,19 +534,14 @@ if (minersactive != 'false') {
 
       item = "Miners";
       buy(item);
-    }else if (minerscost === 'Sold Out') {
-      item = "Miners";
-      soldout(item);
-      displayScore();
-    } 
-    else {
+    }else {
       nocookies();
     }
-  }
+  });
 }
 
 if (wizardactive != 'false') {
-  wizarddiv.onclick = function () { //onclick event to buy one miner
+  wizarddiv.addEventListener('click', function () { //onclick event to buy one miner
 
     // if(wizarditems >= 7) {
     //   item = "";
@@ -632,14 +556,17 @@ if (wizardactive != 'false') {
       wizardcost *= 2;
       wizardcost = parseInt(wizardcost);
       wizardvalue *= 2.3;
+      wizarditems++;
 
+      wizarditemscookie()
       wizardvaluecookie();
       wizardcostcookie();
+      checkitemscost();
       displayScore();
 
       item = "Wizard";
       buy(item);
-    }else if (wizardcost === 'Sold Out') {
+    } else if (wizardcost === 'Sold Out') {
       item = "Wizard";
       soldout(item);
       displayScore();
@@ -647,31 +574,259 @@ if (wizardactive != 'false') {
     else {
       nocookies();
     }
-  }
+  });
 }
-
-
 
 function nocookies() { //function when the user have no cookies
   error = "You don't have enough cookies";
   buyederror.classList.add('buyed-animate');
   buyederror.innerHTML = error;
 
-  setTimeout(async function () { buyederror.classList.remove('buyed-animate'); }, 4000);
+  setTimeout(async () => { buyederror.classList.remove('buyed-animate'); }, 4000);
 }
 
 function buy(item) { //function when the user buyed the item
   buyeddiv.classList.add('buyed-animate');
   buyedoutput.innerHTML = item;
-  setTimeout(async function () { buyeddiv.classList.remove('buyed-animate'); }, 4000);
+  setTimeout(async () => { buyeddiv.classList.remove('buyed-animate'); }, 4000);
 }
 
 function soldout(item) {
   error = ("The Item " + item + " is sold out!");
   buyederror.classList.add('buyed-animate');
   buyederror.innerHTML = error;
-  setTimeout(async function () { buyeddiv.classList.remove('buyed-animate'); }, 4000);
+  setTimeout(async () => { buyeddiv.classList.remove('buyed-animate'); }, 4000);
 }
+
+
+function minimizenumbers() {
+  var z; //score devided by the high number e.g.("million")
+  var c; //var z round to 2 decimal places
+
+  //When the score is between 1 Million and 1 Billion
+  if (score >= 1000000 && score < 1000000000) {
+    z = score / 1000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Million";
+
+  } else if (score >= 1000000000 && score < 1000000000000) {
+    z = score / 1000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Billion";
+  } else if (score >= 1000000000000 && score < 1000000000000000) {
+    z = score / 1000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Trillion";
+  }
+  else if (score >= 1000000000000000 && score < 1000000000000000000) {
+    z = score / 1000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Quadrillion";
+  } else if (score >= 1000000000000000 && score < 1000000000000000000) {
+    z = score / 1000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Quintillion";
+  } else if (score >= 1000000000000000000 && score < 1000000000000000000000) {
+    z = score / 1000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Sextillion";
+  } else if (score >= 1000000000000000000000 && score < 1000000000000000000000000) {
+    z = score / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = c + " Septillion";
+  }
+  else if (score >= 1000000000000000000000000) { //&& score < 1000000000000000000000000000
+    z = score / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    result_output.innerHTML = "Infinity";
+  }
+}
+
+function checkitemscost() {
+  //!Autoclicker
+  if (autoclickcost >= 1000000) {
+    z = autoclickcost / 1000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Million";
+  }
+  if (autoclickcost >= 1000000000) {
+    z = autoclickcost / 1000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Billion";
+  }
+  if (autoclickcost >= 1000000000000) {
+    z = autoclickcost / 1000000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Trillion";
+  }
+  if (autoclickcost >= 1000000000000000) {
+    z = autoclickcost / 1000000000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Quadrillion";
+  }
+  if (autoclickcost >= 1000000000000000000) {
+    z = autoclickcost / 1000000000000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Quintillion";
+  }
+  if (autoclickcost >= 1000000000000000000000) {
+    z = autoclickcost / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Sextillion";
+  }
+  if (autoclickcost >= 1000000000000000000000000) {
+    z = autoclickcost / 1000000000000000000000000;
+    c = z.toFixed(2);
+
+    cost_autoclicker.innerHTML = c + " Septillion";
+  }
+
+  //!Grandmacost
+
+  if (grandmacost >= 1000000) {
+    z = grandmacost / 1000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Million";
+  }
+  if (grandmacost >= 1000000000) {
+    z = grandmacost / 1000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Billion";
+  }
+  if (grandmacost >= 1000000000000) {
+    z = grandmacost / 1000000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Trillion";
+  }
+  if (grandmacost >= 1000000000000000) {
+    z = grandmacost / 1000000000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Quadrillion";
+  }
+  if (grandmacost >= 1000000000000000000) {
+    z = grandmacost / 1000000000000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Quintillion";
+  }
+  if (grandmacost >= 1000000000000000000000) {
+    z = grandmacost / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Sextillion";
+  }
+  if (grandmacost >= 1000000000000000000000000) {
+    z = grandmacost / 1000000000000000000000000;
+    c = z.toFixed(2);
+
+    grandmacostoutput.innerHTML = c + " Septillion";
+  }
+
+  //!Minerscost
+
+  if (minerscost >= 1000000) {
+    z = minerscost / 1000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Million";
+  }
+  if (minerscost >= 1000000000) {
+    z = minerscost / 1000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Billion";
+  }
+  if (minerscost >= 1000000000000) {
+    z = minerscost / 1000000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Trillion";
+  }
+  if (minerscost >= 1000000000000000) {
+    z = minerscost / 1000000000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Quadrillion";
+  }
+  if (minerscost >= 1000000000000000000) {
+    z = minerscost / 1000000000000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Quintillion";
+  }
+  if (minerscost >= 1000000000000000000000) {
+    z = minerscost / 1000000000000000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Sextillion";
+  }
+  if (minerscost >= 1000000000000000000000000) {
+    z = minerscost / 1000000000000000000000000;
+    c = z.toFixed(2);
+
+    minerscostoutput.innerHTML = c + " Septillion";
+  }
+
+  if (wizarditems >= 1) {
+    wizardcost = "Sold Out";
+    wizardcost_output.innerHTML = wizardcost;
+    wizardcostcookie();
+  }
+}
+
+//!Stats DIV //
+
+statsbutton.addEventListener('click', function () {
+  document.getElementById('profile-stats').classList.add('profile-stats-show');
+  statsbutton.style.transition = "0.4s ease-in-out";
+  statsbutton.style.opacity = "0";
+  setTimeout(() => {
+    statsbutton.classList.add('display-none');
+  }, 400);
+  loadstats();
+});
+statsclose.addEventListener('click', function () {
+  document.getElementById('profile-stats').classList.remove('profile-stats-show');
+  statsbutton.classList.remove('display-none');
+  setTimeout(() => {
+    statsbutton.style.transition = "0.4s ease-in-out";
+    statsbutton.style.opacity = "1";
+  }, 100);
+});
+
+function loadstats() {
+  document.getElementById('profile-stats-cookies').innerHTML = round(score, 2);
+  document.getElementById('profile-stats-persecond').innerHTML = autoclickvalue;
+  document.getElementById('profile-stats-clicker').innerHTML = autoclickitems;
+  document.getElementById('profile-stats-grandma').innerHTML = grandmaitems;
+  document.getElementById('profile-stats-wizard').innerHTML = wizarditems;
+}
+
+
+
+//!All Events
+cookie.addEventListener('click', addscore); //function to do the "game important" tasks
+cookie.addEventListener('click', clickanimation1); //function for the click animation
+cookie.addEventListener('click', clicksound);//function for the click sound
+body.addEventListener('load', bodyload(), false);
 
 
 // COOKIES 
@@ -793,6 +948,13 @@ async function wizardvaluecookie() {
   var a = new Date();
   a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
   document.cookie = 'wizardvalue=' + parseInt(wizardvalue) + ';expires=' +
+    a.toGMTString() + ';';
+}
+
+async function wizarditemscookie() {
+  var a = new Date();
+  a = new Date(a.getTime() + 1000 * 60 * 60 * 24 * 365); // Valid for 1 year
+  document.cookie = 'wizarditems=' + wizarditems + ';expires=' +
     a.toGMTString() + ';';
 }
 
