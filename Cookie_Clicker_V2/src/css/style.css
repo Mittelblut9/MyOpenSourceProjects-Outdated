@@ -246,6 +246,57 @@ noscript span {
   color: black;
 }
 
+#profile-button {
+  margin: 20px 20px 0 0;
+  font-weight: 900;
+  font-size: 3em;
+  transform: translateX(-50px);
+  cursor: pointer;
+  position: absolute;
+}
+
+#profile-stats {
+  position: absolute;
+  transform: translateX(400px);
+  right: 0;
+  top: 50px;
+  width: 400px; max-width: 400px;
+  height: 600px; max-height: 1000px;
+  border-top-left-radius: 10px;border-bottom-left-radius: 10px;
+  background-color: rgba(8, 8, 8, 0.76);
+  transition: 0.4s ease-in-out;
+}
+
+#profile-close {
+  cursor: pointer;
+  margin: 20px 0 0 20px;
+  width: 50px;
+  font-size: 3em;
+  color: white;
+}
+
+.profile-header p{
+  text-align: center;
+  color: white;
+  font-size: 2em;
+  font-weight: 900;
+}
+
+.profile-stats-detail {
+  color: white;
+  line-height: 50px;
+  text-align: center;
+}
+.profile-stats-detail span {
+  font-weight: 900;
+  font-size: 1.3em;
+  color: red;
+}
+
+.profile-stats-show {
+  transform: translateX(0) !important;
+}
+
 .display-block {
   display: block !important;
 }
