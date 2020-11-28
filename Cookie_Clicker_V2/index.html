@@ -1,5 +1,5 @@
 <!--
-    /**********************
+/**********************
  * Author: www.Blackdayz.de
  * 
  * Open Source | Version 0.0.2
@@ -34,6 +34,9 @@
         
         <link rel="stylesheet" href="https://use.typekit.net/xue1nky.css">
         <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="src/js/main.js" type="text/javascript" async></script>
     </head>
     <body onmousedown="event.preventDefault ? event.preventDefault() : event.returnValue = false" oncontextmenu="return false">
         
@@ -67,9 +70,9 @@
                     <img class="shop-item-img" src="src/img/shop/miners.png" style="margin-top: -40px"/>
                 </div>
 
-                <div id="wizard" class="shop-item display-none"><span class="shop-item-name">Wizzard</span><br /><br />
+                <div id="wizard" class="shop-item display-none"><span class="shop-item-name">Wizard</span><br /><br />
                     <span class="shop-item-cost">Cost: <span id="cost-wizard"></span></span>
-                    <img class="shop-item-img" src="src/img/shop/Wizzard.svg" style="margin-top: -40px"/>
+                    <img class="shop-item-img" src="src/img/shop/Wizard.svg" style="margin-top: -40px"/>
                 </div>
 
             </div>
@@ -93,10 +96,20 @@
                 <div class="volume" id="volume-on-off"><i class="las la-volume-off" id="volume-on"></i><i class='las la-volume-up' id='volume-off'></i></div>
                 <p><a href="//www.blackdayz.de" target="_blank" rel="noopener">Author: www.blackdayz.de</a></p>
             </div>
+            
+            <div id="profile-stats">
+                <div id="profile-button"><i class="las la-angle-double-left"></i></div>
+                <div id="profile-close"><i class="las la-angle-double-right"></i></div>
+                <div class="profile-header"><p>Your full Stats</p></div>
+                <div class="profile-stats-detail">
+                    <div class="profile-stats-cookies"><span id="profile-stats-cookies"></span> Cookies!</div>
+                    <div class="profile-stats-persecond"><span id="profile-stats-persecond"></span> Cookies per sec</div>
+                    <div class="profile-stats-clicker"><span id="profile-stats-clicker"></span> Grandma items</div>
+                    <div class="profile-stats-grandma"><span id="profile-stats-grandma"></span> Miner items</div>
+                    <div class="profile-stats-wizard"><span id="profile-stats-wizard"></span> Wizard items</div>
+                </div>
+            </div>
         </div>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="src/js/main.js" type="text/javascript" async></script>
     </body>
 </html>
 
