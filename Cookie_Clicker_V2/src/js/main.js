@@ -289,7 +289,7 @@ async function clickanimation1(e) {
   plus1++; //Value "animation guideline"
   //generate a div - each of them have an other id
   $("#Cookie").append('<div id="plus1-' + plus1 + '"  style="font-size: 2em; pointer-events: none; z-index: 1;" hidden>+' + round(cookiesperclick, 1) + '</div>');
-  if (event.keyCode === 32 || event.keyCode === 13) {
+  if (e.keyCode === 32 || e.keyCode === 13) {
     $("#plus1-" + plus1).css("top", e - 100);
     $("#plus1-" + plus1).css("left", e + 210);
   }
