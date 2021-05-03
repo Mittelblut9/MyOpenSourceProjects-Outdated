@@ -1,9 +1,9 @@
 // All Information //
 // I do it in a own file to minimize the main.js
 
-var VERSION = "0.0.4";
-var AUTHOR = "www.blackdayz.de";
-var LICENSE = "MIT Open Source";
+var VERSION = "0.0.5";
+const AUTHOR = "www.blackdayz.de";
+const LICENSE = "MIT Open Source";
 var LASTUPDATE = "28.11.2020";
 //09.11.2020
 var CHANGELOG = "09.11.2020 - Release of the Cookie Clicker made with JavaScript";
