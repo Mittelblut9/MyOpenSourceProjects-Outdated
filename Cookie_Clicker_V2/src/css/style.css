@@ -17,6 +17,7 @@ body {
   overflow-y: hidden !important;
   overflow-x: hidden !important;
   font-family: allotrope, sans-serif;
+  max-width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -257,8 +258,8 @@ noscript span {
 
 #profile-stats {
   position: absolute;
-  transform: translateX(400px);
-  right: 0;
+  /* transform: translateX(400px); */
+  right: -400px;
   top: 50px;
   width: 400px; max-width: 400px;
   height: 600px; max-height: 1000px;
@@ -294,7 +295,7 @@ noscript span {
 }
 
 .profile-stats-show {
-  transform: translateX(0) !important;
+  right: 0 !important;
 }
 
 .display-block {
